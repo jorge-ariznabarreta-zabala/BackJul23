@@ -14,4 +14,4 @@ cors = CORS(app)
 
 @app.route("/") #Si me pides /
 def hello_root():
-    return '<h1>Probando el back</h1>'
+    return '<h1>Hello ROOT</h1>'
