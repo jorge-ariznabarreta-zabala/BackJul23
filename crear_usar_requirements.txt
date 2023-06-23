@@ -1,0 +1,5 @@
+python -m pip freeze > requirements.txt #crea requirements.txt con la lista de paquetes
+
+python -m pip freeze --all > requirements.txt # incluye paquetes de python como pip,...
+
+pip install -r requirements.txt #instala paquetes listados en requirements.txt

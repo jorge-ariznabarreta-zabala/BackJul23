@@ -1,0 +1,6 @@
+Para arrancar MariaDB en linux
+sudo systemctl start mariadb
+Para ver si está arrancado
+sudo systemctl status mariadb
+
+
