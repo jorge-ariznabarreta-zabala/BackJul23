@@ -18,7 +18,7 @@ class Band:
         self.email = email
 
     @classmethod
-    @token_required
+    #@token_required
     def create_table(cls):
         try:
             conn = mariadb.connect(
@@ -49,6 +49,7 @@ class Band:
     @classmethod
     @token_required
     def post_band(cls, band):
+        print ('BAND L53 ',band)
         try:
             conn = mariadb.connect(
                 host=DATABASE['host'],
@@ -172,7 +173,7 @@ class Band:
             return str(e)
 
     @classmethod
-    @token_required
+    #@token_required
     def delete_band(cls, band_id):
         try:
             conn = mariadb.connect(

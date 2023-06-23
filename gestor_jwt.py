@@ -9,6 +9,7 @@ def token_required(f):
     def decorated(*args, **kwargs):
         token = request.headers.get('Authorization')
         secret= request.headers.get('Logindate')
+        #print(secret, token)
         if not token:
             return jsonify({'error': 'Token de autorización faltante'}), 401
         try:
@@ -21,11 +22,11 @@ def token_required(f):
             # Aquí podrías realizar más validaciones o verificar permisos adicionales si es necesario
             return f(*args, **kwargs)
         except jwt.ExpiredSignatureError as e:
-            #print("Error de token expirado:", e)
+            print("Error de token expirado:", e)
             return jsonify({'error': 'Token expirado'}), 401
         except jwt.InvalidTokenError as e:
-            #print("Error de token inválido:", e)
-            return jsonify({'error': 'Token inválido'}), 401
+            print("Error de token inválido:", e)
+            return jsonify({'error': 'Token inválido '+e}), 401
         except Exception as e:
             return {"Error en toke_required": str(e)}, 500
     return decorated
