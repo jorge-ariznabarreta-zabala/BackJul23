@@ -30,57 +30,41 @@ def get_logged_user():
         return jsonify({'user': user, 'token': token})    
     return jsonify({'message': 'Error en el login ROUTER'})
 
-#BANDS
-@app.route("/bands", methods=['GET'])#Si me pides /bands con GET
+
+
+@app.route("/bands", methods=["GET"])
 def get_bands():
-    bands = Band.get_all_bands()
-    
-    # Aquí debes procesar la lista de bandos y devolverla como una respuesta adecuada, por ejemplo:
-    return bands
+    bands, status_code = Band.get_bands()
+    return bands, status_code
 
-@app.route("/bands/<band_id>", methods=['GET']) #Si me pides /bands/ALGO con GET
+@app.route("/bands", methods=["POST"])
+def post_band():
+    band = request.get_json()
+    response, status_code = Band.post_band(band)
+    return jsonify(response), status_code
+
+@app.route("/bands/<int:band_id>", methods=["GET"])
 def get_band(band_id):
-    band = Band.get_band_by_id(band_id)
-    print("@#@#@#@#L44 router_app.py", band)
-    if band:        
-        return band
-    else:
-    # Si no se encuentra el bando, puedes devolver un mensaje de error o una respuesta vacía
-        return jsonify({'message': 'banda no encontrado'})
+    band, status_code = Band.get_band(band_id)
+    return jsonify(band), status_code
 
-
-@app.route("/bands", methods=["POST"]) #Si me pides /bands con POST
-def create_band():
-    data= request.get_json()
-    print ('**createband', data)
-    Band.post_band(data)
-    response = {'message': 'band created successfully'}
-    return jsonify(response), 200
-
-@app.route("/bands/<band_id>", methods=["PUT"])
-def update_band(band_id):
+@app.route("/bands/<int:band_id>", methods=["PUT"])
+def put_band(band_id):
     data = request.get_json()
-    print('**update_band', data['id'])
-    result = Band.put_band(data, band_id)
-    if isinstance(result, str):
-        return jsonify({"message": result})
-    else:
-        return jsonify({"message": "band updated successfully"})
+    response, status_code = Band.put_band(data, band_id)
+    return jsonify(response), status_code
 
-@app.route("/bands/<band_id>", methods=["PATCH"])
+@app.route("/bands/<int:band_id>", methods=["DELETE"])
+def delete_band(band_id):
+    response, status_code = Band.delete_band(band_id)
+    return jsonify(response), status_code
+
+@app.route("/bands/<int:band_id>", methods=["PATCH"])
 def patch_band(band_id):
     data = request.get_json()
-    result = Band.patch_band(data, band_id)
-    if isinstance(result, str):
-        return jsonify({"message": result})
-    else:
-        return jsonify({"message": "band updated successfully"})   
+    response, status_code = Band.patch_band(data, band_id)
+    return jsonify(response), status_code
 
-@app.route("/bands/<band_id>", methods=['DELETE'])#Si me pides /bands/ALGO con DELETE
-def delete_band(band_id): 
-    Band.delete_band(band_id)
-    response = {'message': 'band deleted successfully'}
-    return jsonify(response), 200
 
 # CONCERTS
 @app.route("/concerts", methods=['GET'])#Si me pides /concerts con GET
@@ -134,3 +118,6 @@ def delete_concert(concert_id):
     Concert.delete_concert(concert_id)
     response = {'message': 'concert deleted successfully'}
     return jsonify(response), 200
+
+if __name__ == "__main__":
+    app.run()

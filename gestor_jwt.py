@@ -23,10 +23,10 @@ def token_required(f):
             return f(*args, **kwargs)
         except jwt.ExpiredSignatureError as e:
             print("Error de token expirado:", e)
-            return jsonify({'error': 'Token expirado'}), 401
+            return {'error: Token expirado': str(e)}, 401
         except jwt.InvalidTokenError as e:
             print("Error de token inválido:", e)
-            return jsonify({'error': 'Token inválido '+e}), 401
+            return {'error: Token inválido ': str(e)}, 401
         except Exception as e:
-            return {"Error en toke_required": str(e)}, 500
+            return {"Error en token_required": str(e)}, 500
     return decorated
