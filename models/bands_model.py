@@ -1,20 +1,19 @@
 import mariadb
 import http
 
-# Conexión a la base de datos
-conn = mariadb.connect(
-    user="root",
-    password="penascal",
-    host="127.0.0.1",
-    port=3306,
-    database="concerts"
-)
-cursor = conn.cursor()
-
-
 class Band:
     @classmethod
     def get_bands(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
         try:
             query = "SELECT * FROM bands"
             cursor.execute(query)
@@ -33,9 +32,22 @@ class Band:
             return bands, http.HTTPStatus.OK
         except mariadb.Error as e:
             return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
 
     @classmethod
     def get_band(cls, band_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
         try:
             query = "SELECT * FROM bands WHERE id = ?"
             cursor.execute(query, (band_id,))
@@ -55,9 +67,22 @@ class Band:
                 return {'message': '404 Band not found'}, http.HTTPStatus.NOT_FOUND
         except mariadb.Error as e:
             return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
-            
+        finally:
+            cursor.close()
+            conn.close()
+
     @classmethod
     def post_band(cls, band):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
         query = "INSERT INTO bands (bandname, style, website, email) VALUES (?, ?, ?, ?)"
 
         try:
@@ -70,10 +95,22 @@ class Band:
             return {'message': 'Band created successfully'}, http.HTTPStatus.OK
         except mariadb.Error as e:
             return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
 
-   
     @classmethod
     def put_band(cls, data, band_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
         try:
             query = "SELECT * FROM bands WHERE id = ?"
             cursor.execute(query, (band_id,))
@@ -85,15 +122,26 @@ class Band:
             query = "UPDATE bands SET bandname = ?, style = ?, website = ?, email = ? WHERE id = ?"
             cursor.execute(query, (data['bandname'], data['style'], data['website'], data['email'], band_id))
             conn.commit()
-            cursor.close()
-            conn.close()
 
             return {'message': 'Band updated successfully'}, http.HTTPStatus.OK
         except mariadb.Error as e:
             return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
 
     @classmethod
     def patch_band(cls, data, band_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
         try:
             query = "SELECT * FROM bands WHERE id = ?"
             cursor.execute(query, (band_id,))
@@ -114,16 +162,26 @@ class Band:
 
             cursor.execute(query, tuple(params))
             conn.commit()
-            cursor.close()
-            conn.close()
 
             return {'message': 'Band updated successfully'}, http.HTTPStatus.OK
         except mariadb.Error as e:
             return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
-
+        finally:
+            cursor.close()
+            conn.close()
 
     @classmethod
     def delete_band(cls, band_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
         query = "DELETE FROM bands WHERE id = ?"
 
         try:
@@ -133,6 +191,10 @@ class Band:
 
             conn.commit()
 
-            return {"message": "Band DELETEd successfully"}, http.HTTPStatus.OK
+            return {"message": "Band deleted successfully"}, http.HTTPStatus.OK
         except mariadb.Error as e:
             return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
