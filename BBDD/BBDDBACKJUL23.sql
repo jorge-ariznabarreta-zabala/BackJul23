@@ -23,11 +23,20 @@ INSERT INTO `bands` (`id`, `bandname`, `style`, `email`, `website`) VALUES
 	(15, 'Abba', 'Pop', 'dancing@queen.eus', 'www.dancing_queen.net'),
 	(16, 'Abbaq2', 'Pop', 'dancing@queen.eus', 'www.dancing_queen.net');
 
--- Volcando datos para la tabla concerts.concerts: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla concerts.concerts: ~1 rows (aproximadamente)
 INSERT INTO `concerts` (`id`, `id_stage`, `id_band`, `id_shift`) VALUES
 	(3, 55, 66, 77);
 
--- Volcando datos para la tabla concerts.users: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla concerts.shifts: ~0 rows (aproximadamente)
+INSERT INTO `shifts` (`id`, `day`, `hour`) VALUES
+	(2, '1', '1');
+
+-- Volcando datos para la tabla concerts.stages: ~1 rows (aproximadamente)
+INSERT INTO `stages` (`id`, `name`, `location`) VALUES
+	(2, 'Lehenengo Eszenariyua', 'Bilbon'),
+	(3, 'Primer Escenario', 'En Bilbao');
+
+-- Volcando datos para la tabla concerts.users: ~1 rows (aproximadamente)
 INSERT INTO `users` (`id`, `login_email`, `passw`, `secret`, `rol`) VALUES
 	(1, 'worker@email.es', '1234', '1687426703.252334', 'A');
 
