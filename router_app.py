@@ -31,7 +31,7 @@ def get_logged_user():
     return jsonify({'message': 'Error en el login ROUTER'})
 
 
-
+#BANDS
 @app.route("/bands", methods=["GET"])
 def get_bands():
     bands, status_code = Band.get_bands()
@@ -98,6 +98,74 @@ def delete_concert(concert_id):
 def patch_concert(concert_id):
     data = request.get_json()
     response, status_code = Concert.patch_concert(data, concert_id)
+    return jsonify(response), status_code
+
+#STAGES
+@app.route("/stages", methods=["GET"])
+def get_stages():
+    stages, status_code = Stage.get_stages()
+    return stages, status_code
+
+@app.route("/stages", methods=["POST"])
+def post_stage():
+    stage = request.get_json()
+    response, status_code = Stage.post_stage(stage)
+    return jsonify(response), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["GET"])
+def get_stage(stage_id):
+    stage, status_code = Stage.get_stage(stage_id)
+    return jsonify(stage), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["PUT"])
+def put_stage(stage_id):
+    data = request.get_json()
+    response, status_code = Stage.put_stage(data, stage_id)
+    return jsonify(response), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["DELETE"])
+def delete_stage(stage_id):
+    response, status_code = Stage.delete_stage(stage_id)
+    return jsonify(response), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["PATCH"])
+def patch_stage(stage_id):
+    data = request.get_json()
+    response, status_code = Stage.patch_stage(data, stage_id)
+    return jsonify(response), status_code
+
+#SHIFTS
+@app.route("/shifts", methods=["GET"])
+def get_shifts():
+    shifts, status_code = Shift.get_shifts()
+    return shifts, status_code
+
+@app.route("/shifts", methods=["POST"])
+def post_shift():
+    shift = request.get_json()
+    response, status_code = Shift.post_shift(shift)
+    return jsonify(response), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["GET"])
+def get_shift(shift_id):
+    shift, status_code = Shift.get_shift(shift_id)
+    return jsonify(shift), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["PUT"])
+def put_shift(shift_id):
+    data = request.get_json()
+    response, status_code = Shift.put_shift(data, shift_id)
+    return jsonify(response), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["DELETE"])
+def delete_shift(shift_id):
+    response, status_code = Shift.delete_shift(shift_id)
+    return jsonify(response), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["PATCH"])
+def patch_shift(shift_id):
+    data = request.get_json()
+    response, status_code = Shift.patch_shift(data, shift_id)
     return jsonify(response), status_code
 
 if __name__ == "__main__":
