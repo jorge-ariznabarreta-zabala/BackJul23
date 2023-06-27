@@ -47,7 +47,7 @@ class Band:
     def get_band(cls, band_id):
         # Conexión a la base de datos
         conn = mariadb.connect(
-            user="root",
+            user="juan",
             password="penascal",
             host="127.0.0.1",
             port=3306,
