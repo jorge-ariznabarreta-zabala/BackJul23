@@ -54,9 +54,9 @@ class Band:
             database="concerts"
         )
         cursor = conn.cursor()
-
+        print ("@#@#@ ID ", band_id)
         try:
-            query = "SELECT * FROM bands WHERE id = ?"
+            query = "SELECT id, bandname, style, website, email FROM bands WHERE id = ?"
             cursor.execute(query, (band_id,))
             row = cursor.fetchone()
 
