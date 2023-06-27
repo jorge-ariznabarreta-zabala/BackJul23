@@ -1,0 +1,1390 @@
+Este proyecto empieza en app.py
+from router_app import app
+
+if __name__ == '__main__':
+    with app.app_context():
+        app.run(debug=True)
+
+Te pongo también router_app.py
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from models.bands_model import *
+#get_all_bands, get_band_by, post_band, put_band, del_band
+from models.concerts_model import *
+#get_all_concerts, get_concert_by, post_concert, put_concert, del_concert
+from models.shifts_model import *
+#get_all_shifts, get_shift_by, post_shift, put_shift, del_shift
+from models.stages_model import *
+#get_all_stages, get_stage_by, post_stage, put_stage, del_stage
+from models.model_users import *
+
+app = Flask(__name__)
+cors = CORS(app)
+
+#Crea la tabla si no existe
+def initialize_tables():
+    tables = [Band, Concert, Users, Shift, Stage]
+
+    for table in tables:
+        table.create_table()
+
+# Llamar a la función para inicializar las tablas
+initialize_tables()
+
+
+@app.route("/") #Si me pides /
+def hello_root():
+    return '<h1>Hello ROOT</h1>'
+
+@app.route("/login", methods=['POST'])
+def get_logged_user():
+    login_data = request.json
+    login_email = login_data.get('login_email')
+    passw = login_data.get('passw')
+    if login_email and passw:
+        print ('@#@#@# get_logged_user',login_data, login_email, passw)
+    user, token = Users.login(login_email, passw)
+    if user:
+        return jsonify({'user': user, 'token': token})    
+    return jsonify({'message': 'Error en el login ROUTER'})
+
+
+#BANDS
+@app.route("/bands", methods=["GET"])
+def get_bands():
+    bands, status_code = Band.get_bands()
+    return bands, status_code
+
+@app.route("/bands", methods=["POST"])
+def post_band():
+    band = request.get_json()
+    response, status_code = Band.post_band(band)
+    return jsonify(response), status_code
+
+@app.route("/bands/<int:band_id>", methods=["GET"])
+def get_band(band_id):
+    band, status_code = Band.get_band(band_id)
+    return jsonify(band), status_code
+
+@app.route("/bands/<int:band_id>", methods=["PUT"])
+def put_band(band_id):
+    data = request.get_json()
+    response, status_code = Band.put_band(data, band_id)
+    return jsonify(response), status_code
+
+@app.route("/bands/<int:band_id>", methods=["DELETE"])
+def delete_band(band_id):
+    response, status_code = Band.delete_band(band_id)
+    return jsonify(response), status_code
+
+@app.route("/bands/<int:band_id>", methods=["PATCH"])
+def patch_band(band_id):
+    data = request.get_json()
+    response, status_code = Band.patch_band(data, band_id)
+    return jsonify(response), status_code
+
+
+# CONCERTS
+@app.route("/concerts", methods=["GET"])
+def get_concerts():
+    concerts, status_code = Concert.get_concerts()
+    return concerts, status_code
+
+@app.route("/concerts", methods=["POST"])
+def post_concert():
+    concert = request.get_json()
+    response, status_code = Concert.post_concert(concert)
+    return jsonify(response), status_code
+
+@app.route("/concerts/<int:concert_id>", methods=["GET"])
+def get_concert(concert_id):
+    concert, status_code = Concert.get_concert(concert_id)
+    return jsonify(concert), status_code
+
+@app.route("/concerts/<int:concert_id>", methods=["PUT"])
+def put_concert(concert_id):
+    data = request.get_json()
+    response, status_code = Concert.put_concert(data, concert_id)
+    return jsonify(response), status_code
+
+@app.route("/concerts/<int:concert_id>", methods=["DELETE"])
+def delete_concert(concert_id):
+    response, status_code = Concert.delete_concert(concert_id)
+    return jsonify(response), status_code
+
+@app.route("/concerts/<int:concert_id>", methods=["PATCH"])
+def patch_concert(concert_id):
+    data = request.get_json()
+    response, status_code = Concert.patch_concert(data, concert_id)
+    return jsonify(response), status_code
+
+#STAGES
+@app.route("/stages", methods=["GET"])
+def get_stages():
+    stages, status_code = Stage.get_stages()
+    return stages, status_code
+
+@app.route("/stages", methods=["POST"])
+def post_stage():
+    stage = request.get_json()
+    response, status_code = Stage.post_stage(stage)
+    return jsonify(response), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["GET"])
+def get_stage(stage_id):
+    stage, status_code = Stage.get_stage(stage_id)
+    return jsonify(stage), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["PUT"])
+def put_stage(stage_id):
+    data = request.get_json()
+    response, status_code = Stage.put_stage(data, stage_id)
+    return jsonify(response), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["DELETE"])
+def delete_stage(stage_id):
+    response, status_code = Stage.delete_stage(stage_id)
+    return jsonify(response), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["PATCH"])
+def patch_stage(stage_id):
+    data = request.get_json()
+    response, status_code = Stage.patch_stage(data, stage_id)
+    return jsonify(response), status_code
+
+#SHIFTS
+@app.route("/shifts", methods=["GET"])
+def get_shifts():
+    shifts, status_code = Shift.get_shifts()
+    return shifts, status_code
+
+@app.route("/shifts", methods=["POST"])
+def post_shift():
+    shift = request.get_json()
+    response, status_code = Shift.post_shift(shift)
+    return jsonify(response), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["GET"])
+def get_shift(shift_id):
+    shift, status_code = Shift.get_shift(shift_id)
+    return jsonify(shift), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["PUT"])
+def put_shift(shift_id):
+    data = request.get_json()
+    response, status_code = Shift.put_shift(data, shift_id)
+    return jsonify(response), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["DELETE"])
+def delete_shift(shift_id):
+    response, status_code = Shift.delete_shift(shift_id)
+    return jsonify(response), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["PATCH"])
+def patch_shift(shift_id):
+    data = request.get_json()
+    response, status_code = Shift.patch_shift(data, shift_id)
+    return jsonify(response), status_code
+
+if __name__ == "__main__":
+    app.run()
+Y en una carpeta MODELS tenemos bands_model.py, concerts_model.py, model_users.py, shifts_model.py y stages_model.py
+
+bands_model.py:
+import mariadb
+import http
+from gestor_jwt import token_required 
+
+class Band:
+    def __init__(self, id, bandname, style, website, email):
+        self.id = id
+        self.bandname = bandname
+        self.style = style
+        self.website = website
+        self.email = email
+    
+    @classmethod
+    def create_table(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="localhost",
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS bands (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    bandname TEXT NOT NULL,
+                    style TEXT NOT NULL,
+                    website TEXT,
+                    email TEXT NOT NULL
+                )
+            ''')
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+        
+    @classmethod
+    @token_required
+    def get_bands(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM bands"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+            bands = []
+
+            for row in rows:
+                bands.append({
+                    "id": row[0],
+                    "bandname": row[1],
+                    "style": row[2],
+                    "website": row[3],
+                    "email": row[4]
+                })
+
+            return bands, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+    @token_required
+    def get_band(cls, band_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="juan",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+        print ("@#@#@ ID ", band_id)
+        try:
+            query = "SELECT id, bandname, style, website, email FROM bands WHERE id = ?"
+            cursor.execute(query, (band_id,))
+            row = cursor.fetchone()
+
+            if row:
+                band = {
+                    "id": row[0],
+                    "bandname": row[1],
+                    "style": row[2],
+                    "website": row[3],
+                    "email": row[4]
+                }
+
+                return band, http.HTTPStatus.OK
+            else:
+                return {'message': '404 Band not found'}, http.HTTPStatus.NOT_FOUND
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+    @token_required
+    def post_band(cls, band):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        query = "INSERT INTO bands (bandname, style, website, email) VALUES (?, ?, ?, ?)"
+
+        try:
+            cursor.execute(query, (
+                band["bandname"], band["style"], band["website"], band["email"]
+            ))
+
+            conn.commit()
+
+            return {'message': 'Band created successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+    @token_required
+    def put_band(cls, data, band_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM bands WHERE id = ?"
+            cursor.execute(query, (band_id,))
+            row = cursor.fetchone()
+
+            if not row:
+                return {'message': 'Band not found'}, http.HTTPStatus.NOT_FOUND
+
+            query = "UPDATE bands SET bandname = ?, style = ?, website = ?, email = ? WHERE id = ?"
+            cursor.execute(query, (data['bandname'], data['style'], data['website'], data['email'], band_id))
+            conn.commit()
+
+            return {'message': 'Band updated successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+    @token_required
+    def patch_band(cls, data, band_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM bands WHERE id = ?"
+            cursor.execute(query, (band_id,))
+            row = cursor.fetchone()
+
+            if not row:
+                return {'message': 'Band not found'}, http.HTTPStatus.NOT_FOUND
+
+            query = "UPDATE bands SET "
+            params = []
+
+            for key, value in data.items():
+                query += key + " = ?, "
+                params.append(value)
+
+            query = query[:-2] + " WHERE id = ?"
+            params.append(band_id)
+
+            cursor.execute(query, tuple(params))
+            conn.commit()
+
+            return {'message': 'Band updated successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+    @token_required
+    def delete_band(cls, band_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        query = "DELETE FROM bands WHERE id = ?"
+
+        try:
+            cursor.execute(query, (band_id,))
+            if cursor.rowcount == 0:
+                return {'message': 'Band not found'}, http.HTTPStatus.NOT_FOUND
+
+            conn.commit()
+
+            return {"message": "Band deleted successfully"}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+			
+concerts_model.py:
+import mariadb
+import http
+
+class Concert:
+    def __init__(self, id, id_stage, id_band, id_shift):
+        self.id = id
+        self.id_stage = id_stage
+        self.id_band = id_band
+        self.id_shift = id_shift
+
+    @classmethod
+    def create_table(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="localhost",
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS concerts (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    id_stage INTEGER NOT NULL,
+                    id_band INTEGER NOT NULL,
+                    id_shift INTEGER NOT NULL,
+                    FOREIGN KEY (id_stage) REFERENCES stages(id),
+                    FOREIGN KEY (id_band) REFERENCES bands(id),
+                    FOREIGN KEY (id_shift) REFERENCES shifts(id)
+                )
+            ''')
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def get_concerts(cls):
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM concerts"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+            concerts = []
+
+            for row in rows:
+                concerts.append({
+                    "id": row[0],
+                    "id_stage": row[1],
+                    "id_band": row[2],
+                    "id_shift": row[3]
+                })
+
+            return concerts, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def get_concert(cls, concert_id):
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM concerts WHERE id = ?"
+            cursor.execute(query, (concert_id,))
+            row = cursor.fetchone()
+
+    
+            if row:
+                concert={
+                    "id": row[0],
+                    "id_stage": row[1],
+                    "id_band": row[2],
+                    "id_shift": row[3]
+                }
+
+                return concert, http.HTTPStatus.OK
+            else:
+                return {'message': '404 Concert not found'}, http.HTTPStatus.NOT_FOUND
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def post_concert(cls, concert):
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+        print ("L76 @#@@#@#@#@# ", concert)
+
+        query = "INSERT INTO concerts (id_stage, id_band, id_shift) VALUES (?, ?, ?)"
+
+        try:
+            cursor.execute(query, (
+                concert["id_stage"], concert["id_band"], concert["id_shift"]
+            ))
+
+            conn.commit()
+
+            return {'message': 'Concert created successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def put_concert(cls, data, concert_id):
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM concerts WHERE id = ?"
+            cursor.execute(query, (concert_id,))
+            row = cursor.fetchone()
+
+            if not row:
+                return {'message': 'Concert not found'}, http.HTTPStatus.NOT_FOUND
+
+            query = "UPDATE concerts SET id_stage = ?, id_band = ?, id_shift = ? WHERE id = ?"
+            cursor.execute(query, (data['id_stage'], data['id_band'], data['id_shift'], concert_id))
+            conn.commit()
+
+            return {'message': 'Concert updated successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def patch_concert(cls, data, concert_id):
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM concerts WHERE id = ?"
+            cursor.execute(query, (concert_id,))
+            row = cursor.fetchone()
+
+            if not row:
+                return {'message': 'Concert not found'}, http.HTTPStatus.NOT_FOUND
+
+            query = "UPDATE concerts SET "
+            params = []
+
+            for key, value in data.items():
+                query += key + " = ?, "
+                params.append(value)
+
+            query = query[:-2] + " WHERE id = ?"
+            params.append(concert_id)
+
+            cursor.execute(query, tuple(params))
+            conn.commit()
+
+            return {'message': 'Concert updated successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def delete_concert(cls, concert_id):
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        query = "DELETE FROM concerts WHERE id = ?"
+
+        try:
+            cursor.execute(query, (concert_id,))
+            if cursor.rowcount == 0:
+                return {'message': 'Concert not found'}, http.HTTPStatus.NOT_FOUND
+
+            conn.commit()
+
+            return {"message": "Concert deleted successfully"}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+#Crea la tabla si no existe
+Concert.create_table()
+
+model_users.py:
+from datetime import datetime
+import jwt
+from gestor_jwt import token_required
+import mariadb
+from flask import jsonify
+
+
+DATABASE = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'penascal',
+    'database': 'Concerts'
+}
+
+class Users:
+    def __init__(self, id, login_email, passw, secret, rol):
+        self.id = id
+        self.login_email = login_email
+        self.passw = passw
+        self.secret = secret
+        self.rol = rol
+
+    @classmethod  
+    def login(cls, login_email, passw):
+        try:
+            conn = mariadb.connect(**DATABASE)
+            c = conn.cursor()
+            c.execute("SELECT * FROM users WHERE login_email=?", (login_email,))
+            result = c.fetchone()
+
+            if result and result[2] == passw:
+                secret = str(datetime.now().timestamp())
+                user = {
+                    "id": result[0],
+                    "login_email": result[1],
+                    "passw": result[2],
+                    "secret": secret,
+                    "rol": result[4]
+                }
+                token = Users.generate_token(user, secret)
+                return user, token
+            else:
+                return ({"error": "Credenciales inválidas"}), 401
+
+        except mariadb.Error as e:
+            return ({"SQLError": str(e)}, 500)
+        finally:
+            conn.close()
+
+    @staticmethod
+    def generate_token(user, secret):
+        token = jwt.encode({"email": user["login_email"], "passw": user["passw"], "secret": user["secret"], "rol": user["rol"]}, secret)
+        return token.decode('utf-8')
+    
+    
+    @classmethod
+    def create_table(cls):
+        try:
+            conn = mariadb.connect(**DATABASE)
+            c = conn.cursor()
+            c.execute('''
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    login_email TEXT NOT NULL,
+                    passw TEXT NOT NULL,
+                    secret TEXT,
+                    rol TEXT NOT NULL
+                )
+            ''')
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+        finally:
+            conn.close()
+    
+
+    @classmethod
+    #@token_required
+    def post_user(cls, user):
+        try:
+            conn = mariadb.connect(**DATABASE)
+            c = conn.cursor()
+            c.execute('''
+                INSERT INTO users (login_email, passw, secret, rol)
+                VALUES (?, ?, ?, ?)
+            ''', (user["login_email"], user["passw"], user["secret"], user["rol"]))
+            conn.commit()
+            return jsonify({'message': 'user created successfully'}), 200
+        except mariadb.Error as e:
+            return jsonify({"Error": str(e)}), 500
+        finally:
+            conn.close()
+
+
+    @classmethod
+    @token_required
+    def get_user_by_id(cls, user_id):
+        try:
+            conn = mariadb.connect(**DATABASE)
+            c = conn.cursor()
+            c.execute("SELECT * FROM users WHERE id=?", (user_id,))
+            result = c.fetchone()
+            if result:
+                user = {
+                    "id": result[0],
+                    "login_email": result[1],
+                    "passw": result[2],
+                    "secret": result[3],
+                    "rol": result[4]
+                }
+                return user
+        except mariadb.Error as e:
+            return jsonify({"Error": str(e)}), 500
+        finally:
+            conn.close()
+
+    @classmethod
+    @token_required
+    def get_all_users(cls):
+        try:
+            conn = mariadb.connect(**DATABASE)
+            c = conn.cursor()
+            c.execute("SELECT * FROM users")
+            results = c.fetchall()
+            users = []
+            for result in results:
+                user = {
+                    "id": result[0],
+                    "login_email": result[1],
+                    "passw": result[2],
+                    "secret": result[3],
+                    "rol": result[4]
+                }
+                users.append(user)
+            return users
+        
+        except mariadb.Error as e:
+            return jsonify({"Error": str(e)}), 500
+        finally:
+            conn.close()
+
+
+    @classmethod
+    @token_required
+    def put_user(cls, data, user_id):
+        try:
+            conn = mariadb.connect(**DATABASE)
+            c = conn.cursor()
+            c.execute('''
+                UPDATE users SET login_email=?, passw=?, secret=?, rol=?
+                WHERE id=?
+            ''', (data['login_email'], data['passw'], data['secret'], data['rol'], user_id))
+            conn.commit()
+            return None
+        except mariadb.Error as e:
+            return str(e)
+        finally:
+            conn.close()
+
+
+    @classmethod
+    @token_required
+    def delete_user(cls, user_id):
+        try:
+            conn = mariadb.connect(**DATABASE)
+            c = conn.cursor()
+            c.execute("DELETE FROM users WHERE id=?", (user_id,))
+            conn.commit()
+        except mariadb.Error as e:
+            return jsonify({"Error": str(e)}), 500
+        finally:
+            conn.close()
+
+
+    @classmethod
+    @token_required
+    def patch_user(cls, data, user_id):
+        try:
+            conn = mariadb.connect(**DATABASE)
+            c = conn.cursor()
+            update_query = "UPDATE users SET "
+            params = []
+            for key, value in data.items():
+                update_query += f"{key}=?, "
+                params.append(value)
+            update_query = update_query[:-2]
+            update_query += " WHERE id=?"
+            params.append(user_id)
+            c.execute(update_query, tuple(params))
+            conn.commit()
+            return None
+        except mariadb.Error as e:
+            return str(e)
+        finally:
+            conn.close()
+
+#Crea la tabla si no existe       
+Users.create_table()
+
+shifts_model.py: 
+#shift = id, day, hour
+import mariadb
+import http
+
+class Shift:
+    def __init__(self, id, day, hour):
+        self.id = id
+        self.day = day
+        self.hour = hour
+
+    import mariadb
+
+class Shift:
+    def __init__(self, id, day, hour):
+        self.id = id
+        self.day = day
+        self.hour = hour
+    
+    @classmethod
+    def create_table(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="localhost",
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS shifts (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    day INTEGER NOT NULL,
+                    hour INTEGER NOT NULL
+                )
+            ''')
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+
+        
+    @classmethod
+	@token_required
+    def get_shifts(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM shifts"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+            shifts = []
+
+            for row in rows:
+                shifts.append({
+                    "id": row[0],
+                    "day": row[1],
+                    "hour": row[2]
+                })
+
+            return shifts, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def get_shift(cls, shift_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM shifts WHERE id = ?"
+            cursor.execute(query, (shift_id,))
+            row = cursor.fetchone()
+
+            if row:
+                shift = {
+                    "id": row[0],
+                    "day": row[1],
+                    "hour": row[2]
+                }
+
+                return shift, http.HTTPStatus.OK
+            else:
+                return {'message': '404 Shift not found'}, http.HTTPStatus.NOT_FOUND
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def post_shift(cls, shift):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        query = "INSERT INTO shifts (day, hour) VALUES (?, ?)"
+
+        try:
+            cursor.execute(query, (
+                shift["day"], shift["hour"]
+            ))
+
+            conn.commit()
+
+            return {'message': 'Shift created successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def put_shift(cls, data, shift_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM shifts WHERE id = ?"
+            cursor.execute(query, (shift_id,))
+            row = cursor.fetchone()
+
+            if not row:
+                return {'message': 'Shift not found'}, http.HTTPStatus.NOT_FOUND
+
+            query = "UPDATE shifts SET day = ?, hour = ? WHERE id = ?"
+            cursor.execute(query, (data['day'], data['hour'], shift_id))
+            conn.commit()
+
+            return {'message': 'Shift updated successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def patch_shift(cls, data, shift_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM shifts WHERE id = ?"
+            cursor.execute(query, (shift_id,))
+            row = cursor.fetchone()
+
+            if not row:
+                return {'message': 'Shift not found'}, http.HTTPStatus.NOT_FOUND
+
+            query = "UPDATE shifts SET "
+            params = []
+
+            for key, value in data.items():
+                query += key + " = ?, "
+                params.append(value)
+
+            query = query[:-2] + " WHERE id = ?"
+            params.append(shift_id)
+
+            cursor.execute(query, tuple(params))
+            conn.commit()
+
+            return {'message': 'Shift updated successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def delete_shift(cls, shift_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        query = "DELETE FROM shifts WHERE id = ?"
+
+        try:
+            cursor.execute(query, (shift_id,))
+            if cursor.rowcount == 0:
+                return {'message': 'Shift not found'}, http.HTTPStatus.NOT_FOUND
+
+            conn.commit()
+
+            return {"message": "Shift deleted successfully"}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+#Crea la tabla si no existe
+Shift.create_table()
+
+stages_model.py:
+import mariadb
+import http
+
+class Stage:
+    def __init__(self, id, name, location):
+        self.id = id
+        self.name = name
+        self.location = location
+
+    @classmethod
+    def create_table(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="localhost",
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS stages (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    name TEXT NOT NULL,
+                    location TEXT NOT NULL
+                )
+            ''')
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+        
+    @classmethod
+	@token_required
+    def get_stages(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM stages"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+            stages = []
+
+            for row in rows:
+                stage = {
+                    "id": row[0],
+                    "name": row[1],
+                    "location": row[2]
+                }
+                stages.append(stage)
+
+            return stages, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def get_stage(cls, stage_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM stages WHERE id = ?"
+            cursor.execute(query, (stage_id,))
+            row = cursor.fetchone()
+
+            if row:
+                stage = {
+                    "id": row[0],
+                    "name": row[1],
+                    "location": row[2]
+                }
+
+                return stage, http.HTTPStatus.OK
+            else:
+                return {'message': '404 Stage not found'}, http.HTTPStatus.NOT_FOUND
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def post_stage(cls, stage):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        query = "INSERT INTO stages (name, location) VALUES (?, ?)"
+
+        try:
+            cursor.execute(query, (
+                stage["name"], stage["location"]
+            ))
+
+            conn.commit()
+
+            return {'message': 'Stage created successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def put_stage(cls, data, stage_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM stages WHERE id = ?"
+            cursor.execute(query, (stage_id,))
+            row = cursor.fetchone()
+
+            if not row:
+                return {'message': 'Stage not found'}, http.HTTPStatus.NOT_FOUND
+
+            query = "UPDATE stages SET name = ?, location = ? WHERE id = ?"
+            cursor.execute(query, (data['name'], data['location'], stage_id))
+            conn.commit()
+
+            return {'message': 'Stage updated successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def patch_stage(cls, data, stage_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            query = "SELECT * FROM stages WHERE id = ?"
+            cursor.execute(query, (stage_id,))
+            row = cursor.fetchone()
+
+            if not row:
+                return {'message': 'Stage not found'}, http.HTTPStatus.NOT_FOUND
+
+            query = "UPDATE stages SET "
+            params = []
+
+            for key, value in data.items():
+                query += key + " = ?, "
+                params.append(value)
+
+            query = query[:-2] + " WHERE id = ?"
+            params.append(stage_id)
+
+            cursor.execute(query, tuple(params))
+            conn.commit()
+
+            return {'message': 'Stage updated successfully'}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
+	@token_required
+    def delete_stage(cls, stage_id):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="127.0.0.1",
+            port=3306,
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        query = "DELETE FROM stages WHERE id = ?"
+
+        try:
+            cursor.execute(query, (stage_id,))
+            if cursor.rowcount == 0:
+                return {'message': 'Stage not found'}, http.HTTPStatus.NOT_FOUND
+
+            conn.commit()
+
+            return {"message": "Stage deleted successfully"}, http.HTTPStatus.OK
+        except mariadb.Error as e:
+            return {'Error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+        finally:
+            cursor.close()
+            conn.close()
+#Crea la tabla si no existe
+Stage.create_table()
+
+En la carpeta raiz tenemos gestor_jwt.py:
+import jwt
+from functools import wraps
+from flask import request, jsonify
+
+
+# Función para verificar el token JWT en las solicitudes protegidas
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        secret= request.headers.get('Logindate')
+        #print(secret, token)
+        if not token:
+            return jsonify({'error': 'Token de autorización faltante'}), 401
+        try:
+            #print(token)
+            token = token.replace("Bearer", "").strip()
+            #print("Token recibido:", token)
+            data = jwt.decode(token, secret)
+            #print("Token decodificado:", data)
+
+            # Aquí podrías realizar más validaciones o verificar permisos adicionales si es necesario
+            return f(*args, **kwargs)
+        except jwt.ExpiredSignatureError as e:
+            print("Error de token expirado:", e)
+            return {'error: Token expirado': str(e)}, 401
+        except jwt.InvalidTokenError as e:
+            print("Error de token inválido:", e)
+            return {'error: Token inválido ': str(e)}, 401
+        except Exception as e:
+            return {"Error en token_required": str(e)}, 500
+    return decorated
