@@ -7,6 +7,41 @@ class Shift:
         self.id = id
         self.day = day
         self.hour = hour
+
+    import mariadb
+
+class Shift:
+    def __init__(self, id, day, hour):
+        self.id = id
+        self.day = day
+        self.hour = hour
+    
+    @classmethod
+    def create_table(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="localhost",
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS shifts (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    day INTEGER NOT NULL,
+                    hour INTEGER NOT NULL
+                )
+            ''')
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+
         
     @classmethod
     def get_shifts(cls):
@@ -199,3 +234,5 @@ class Shift:
         finally:
             cursor.close()
             conn.close()
+#Crea la tabla si no existe
+Shift.create_table()

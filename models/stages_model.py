@@ -6,6 +6,32 @@ class Stage:
         self.id = id
         self.name = name
         self.location = location
+
+    @classmethod
+    def create_table(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="localhost",
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS stages (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    name TEXT NOT NULL,
+                    location TEXT NOT NULL
+                )
+            ''')
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+        finally:
+            cursor.close()
+            conn.close()
         
     @classmethod
     def get_stages(cls):
@@ -199,3 +225,5 @@ class Stage:
         finally:
             cursor.close()
             conn.close()
+#Crea la tabla si no existe
+Stage.create_table()

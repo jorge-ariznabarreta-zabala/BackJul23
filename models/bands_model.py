@@ -1,5 +1,6 @@
 import mariadb
 import http
+from gestor_jwt import token_required 
 
 class Band:
     def __init__(self, id, bandname, style, website, email):
@@ -8,8 +9,37 @@ class Band:
         self.style = style
         self.website = website
         self.email = email
+    
+    @classmethod
+    def create_table(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="localhost",
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS bands (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    bandname TEXT NOT NULL,
+                    style TEXT NOT NULL,
+                    website TEXT,
+                    email TEXT NOT NULL
+                )
+            ''')
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+        finally:
+            cursor.close()
+            conn.close()
         
     @classmethod
+    @token_required
     def get_bands(cls):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -44,6 +74,7 @@ class Band:
             conn.close()
 
     @classmethod
+    @token_required
     def get_band(cls, band_id):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -79,6 +110,7 @@ class Band:
             conn.close()
 
     @classmethod
+    @token_required
     def post_band(cls, band):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -107,6 +139,7 @@ class Band:
             conn.close()
 
     @classmethod
+    @token_required
     def put_band(cls, data, band_id):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -138,6 +171,7 @@ class Band:
             conn.close()
 
     @classmethod
+    @token_required
     def patch_band(cls, data, band_id):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -178,6 +212,7 @@ class Band:
             conn.close()
 
     @classmethod
+    @token_required
     def delete_band(cls, band_id):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -204,4 +239,3 @@ class Band:
         finally:
             cursor.close()
             conn.close()
-

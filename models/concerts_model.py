@@ -9,6 +9,36 @@ class Concert:
         self.id_shift = id_shift
 
     @classmethod
+    def create_table(cls):
+        # Conexión a la base de datos
+        conn = mariadb.connect(
+            user="root",
+            password="penascal",
+            host="localhost",
+            database="concerts"
+        )
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS concerts (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    id_stage INTEGER NOT NULL,
+                    id_band INTEGER NOT NULL,
+                    id_shift INTEGER NOT NULL,
+                    FOREIGN KEY (id_stage) REFERENCES stages(id),
+                    FOREIGN KEY (id_band) REFERENCES bands(id),
+                    FOREIGN KEY (id_shift) REFERENCES shifts(id)
+                )
+            ''')
+            conn.commit()
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+
+    @classmethod
     def get_concerts(cls):
         conn = mariadb.connect(
             user="root",
@@ -197,3 +227,5 @@ class Concert:
         finally:
             cursor.close()
             conn.close()
+#Crea la tabla si no existe
+Concert.create_table()

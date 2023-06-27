@@ -12,7 +12,6 @@ DATABASE = {
     'database': 'Concerts'
 }
 
-
 class Users:
     def __init__(self, id, login_email, passw, secret, rol):
         self.id = id
@@ -63,7 +62,7 @@ class Users:
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTO_INCREMENT,
                     login_email TEXT NOT NULL,
-                    passw TEXT,
+                    passw TEXT NOT NULL,
                     secret TEXT,
                     rol TEXT NOT NULL
                 )
@@ -76,7 +75,7 @@ class Users:
     
 
     @classmethod
-    @token_required
+    #@token_required
     def post_user(cls, user):
         try:
             conn = mariadb.connect(**DATABASE)
@@ -195,3 +194,6 @@ class Users:
             return str(e)
         finally:
             conn.close()
+
+#Crea la tabla si no existe       
+Users.create_table()

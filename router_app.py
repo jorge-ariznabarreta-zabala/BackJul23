@@ -13,6 +13,16 @@ from models.model_users import *
 app = Flask(__name__)
 cors = CORS(app)
 
+#Crea la tabla si no existe
+def initialize_tables():
+    tables = [Band, Concert, Users, Shift, Stage]
+
+    for table in tables:
+        table.create_table()
+
+# Llamar a la función para inicializar las tablas
+initialize_tables()
+
 
 @app.route("/") #Si me pides /
 def hello_root():
