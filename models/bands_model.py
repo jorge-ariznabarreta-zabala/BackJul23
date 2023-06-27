@@ -2,6 +2,13 @@ import mariadb
 import http
 
 class Band:
+    def __init__(self, id, bandname, style, website, email):
+        self.id = id
+        self.bandname = bandname
+        self.style = style
+        self.website = website
+        self.email = email
+        
     @classmethod
     def get_bands(cls):
         # Conexión a la base de datos

@@ -31,7 +31,7 @@ def get_logged_user():
     return jsonify({'message': 'Error en el login ROUTER'})
 
 
-
+#BANDS
 @app.route("/bands", methods=["GET"])
 def get_bands():
     bands, status_code = Band.get_bands()
@@ -67,57 +67,106 @@ def patch_band(band_id):
 
 
 # CONCERTS
-@app.route("/concerts", methods=['GET'])#Si me pides /concerts con GET
+@app.route("/concerts", methods=["GET"])
 def get_concerts():
-    concerts = Concert.get_all_concerts()
-    
-    # Aquí debes procesar la lista de concertos y devolverla como una respuesta adecuada, por ejemplo:
-    return concerts
+    concerts, status_code = Concert.get_concerts()
+    return concerts, status_code
 
-@app.route("/concerts/<concert_id>", methods=['GET']) #Si me pides /concerts/ALGO con GET
+@app.route("/concerts", methods=["POST"])
+def post_concert():
+    concert = request.get_json()
+    response, status_code = Concert.post_concert(concert)
+    return jsonify(response), status_code
+
+@app.route("/concerts/<int:concert_id>", methods=["GET"])
 def get_concert(concert_id):
-    
-    concert = Concert.get_concert_by_id(concert_id)
-    if concert:        
-        return jsonify(concert)
-    else:
-    # Si no se encuentra el concerto, puedes devolver un mensaje de error o una respuesta vacía
-        return jsonify({'message': 'concerta no encontrado'})
+    concert, status_code = Concert.get_concert(concert_id)
+    return jsonify(concert), status_code
 
-
-@app.route("/concerts", methods=["POST"]) #Si me pides /concerts con POST
-def create_concert():
-    data= request.get_json()
-    print ('**createconcert', data)
-    Concert.post_concert(data)
-
-    response = {'message': 'concert created successfully'}
-    return jsonify(response), 200
-
-@app.route("/concerts/<concert_id>", methods=["PUT"])
-def update_concert(concert_id):
+@app.route("/concerts/<int:concert_id>", methods=["PUT"])
+def put_concert(concert_id):
     data = request.get_json()
-    print('**update_concert', data['id'])
-    result = Concert.put_concert(data, concert_id)
-    if isinstance(result, str):
-        return jsonify({"message": result})
-    else:
-        return jsonify({"message": "concert updated successfully"})
+    response, status_code = Concert.put_concert(data, concert_id)
+    return jsonify(response), status_code
 
-@app.route("/concerts/<concert_id>", methods=["PATCH"])
+@app.route("/concerts/<int:concert_id>", methods=["DELETE"])
+def delete_concert(concert_id):
+    response, status_code = Concert.delete_concert(concert_id)
+    return jsonify(response), status_code
+
+@app.route("/concerts/<int:concert_id>", methods=["PATCH"])
 def patch_concert(concert_id):
     data = request.get_json()
-    result = Concert.patch_concert(data, concert_id)
-    if isinstance(result, str):
-        return jsonify({"message": result})
-    else:
-        return jsonify({"message": "concert updated successfully"})   
+    response, status_code = Concert.patch_concert(data, concert_id)
+    return jsonify(response), status_code
 
-@app.route("/concerts/<concert_id>", methods=['DELETE'])#Si me pides /concerts/ALGO con DELETE
-def delete_concert(concert_id): 
-    Concert.delete_concert(concert_id)
-    response = {'message': 'concert deleted successfully'}
-    return jsonify(response), 200
+#STAGES
+@app.route("/stages", methods=["GET"])
+def get_stages():
+    stages, status_code = Stage.get_stages()
+    return stages, status_code
+
+@app.route("/stages", methods=["POST"])
+def post_stage():
+    stage = request.get_json()
+    response, status_code = Stage.post_stage(stage)
+    return jsonify(response), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["GET"])
+def get_stage(stage_id):
+    stage, status_code = Stage.get_stage(stage_id)
+    return jsonify(stage), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["PUT"])
+def put_stage(stage_id):
+    data = request.get_json()
+    response, status_code = Stage.put_stage(data, stage_id)
+    return jsonify(response), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["DELETE"])
+def delete_stage(stage_id):
+    response, status_code = Stage.delete_stage(stage_id)
+    return jsonify(response), status_code
+
+@app.route("/stages/<int:stage_id>", methods=["PATCH"])
+def patch_stage(stage_id):
+    data = request.get_json()
+    response, status_code = Stage.patch_stage(data, stage_id)
+    return jsonify(response), status_code
+
+#SHIFTS
+@app.route("/shifts", methods=["GET"])
+def get_shifts():
+    shifts, status_code = Shift.get_shifts()
+    return shifts, status_code
+
+@app.route("/shifts", methods=["POST"])
+def post_shift():
+    shift = request.get_json()
+    response, status_code = Shift.post_shift(shift)
+    return jsonify(response), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["GET"])
+def get_shift(shift_id):
+    shift, status_code = Shift.get_shift(shift_id)
+    return jsonify(shift), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["PUT"])
+def put_shift(shift_id):
+    data = request.get_json()
+    response, status_code = Shift.put_shift(data, shift_id)
+    return jsonify(response), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["DELETE"])
+def delete_shift(shift_id):
+    response, status_code = Shift.delete_shift(shift_id)
+    return jsonify(response), status_code
+
+@app.route("/shifts/<int:shift_id>", methods=["PATCH"])
+def patch_shift(shift_id):
+    data = request.get_json()
+    response, status_code = Shift.patch_shift(data, shift_id)
+    return jsonify(response), status_code
 
 if __name__ == "__main__":
     app.run()
