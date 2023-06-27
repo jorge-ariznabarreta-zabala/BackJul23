@@ -48,4 +48,8 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+#Python
 src/__pycache__/*
+__pycache__/
+.env

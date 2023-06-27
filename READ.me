@@ -1,0 +1,96 @@
+Por supuesto, aquí tienes un ejemplo de contenido para el archivo README.md:
+
+# Concerts API
+
+Esta API proporciona funcionalidades para gestionar conciertos, artistas, escenarios y turnos de un evento musical. Utiliza autenticación basada en tokens JWT para proteger las rutas y garantizar la seguridad de los datos.
+
+## Requisitos previos
+
+- Python 3.x
+- Flask
+- Mariadb
+- PyJWT
+
+## Instalación
+
+1. Clona el repositorio en tu máquina local:
+
+```
+git clone https://github.com/tu_usuario/concerts-api.git
+```
+
+2. Navega al directorio del proyecto:
+
+```
+cd concerts-api
+```
+
+3. Crea un entorno virtual:
+
+```
+python3 -m venv venv
+```
+
+4. Activa el entorno virtual:
+
+- En Windows:
+
+```
+venv\Scripts\activate
+```
+
+- En macOS y Linux:
+
+```
+source venv/bin/activate
+```
+
+5. Instala las dependencias:
+
+```
+pip install -r requirements.txt
+```
+
+6. Configura la base de datos:
+
+- Crea una base de datos MySQL/MariaDB en tu servidor local.
+- Actualiza las credenciales de conexión en los archivos `config.py`, `artists_model.py`, `concerts_model.py`, `shifts_model.py` y `stages_model.py`.
+
+7. Inicia la aplicación:
+
+```
+python app.py
+```
+
+La API estará disponible en `http://localhost:5000`.
+
+## Uso
+
+### Autenticación
+
+La API utiliza autenticación basada en tokens JWT. Para realizar cualquier solicitud a las rutas protegidas, debes incluir un encabezado `Authorization` con el token JWT.
+
+### Endpoints
+
+La API proporciona los siguientes endpoints:
+
+- `/artists`: Gestión de artistas.
+- `/concerts`: Gestión de conciertos.
+- `/shifts`: Gestión de turnos.
+- `/stages`: Gestión de escenarios.
+
+Cada endpoint admite los métodos HTTP estándar (GET, POST, PUT, PATCH, DELETE) para realizar operaciones de lectura, creación, actualización y eliminación de datos.
+
+Consulta la documentación completa de la API para obtener detalles sobre los parámetros y las respuestas esperadas.
+
+## Contribuciones
+
+¡Las contribuciones son bienvenidas! Si deseas mejorar esta API o agregar nuevas funcionalidades, no dudes en enviar un pull request.
+
+## Licencia
+
+Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
+
+---
+
+¡Gracias por usar la API de Concerts! Si tienes alguna pregunta o problema, no dudes en comunicarte con nosotros.
