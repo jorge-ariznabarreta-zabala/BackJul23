@@ -225,5 +225,3 @@ class Stage:
         finally:
             cursor.close()
             conn.close()
-#Crea la tabla si no existe
-Stage.create_table()

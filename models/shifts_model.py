@@ -234,5 +234,3 @@ class Shift:
         finally:
             cursor.close()
             conn.close()
-#Crea la tabla si no existe
-Shift.create_table()

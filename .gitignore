@@ -1,55 +1,53 @@
 # Byte-compiled / optimized / DLL files
-src/__pycache__/
+__pycache__/
 *.py[cod]
+*$py.class
 
 # C extensions
 *.so
 
 # Distribution / packaging
-bin/
-build/
-develop-eggs/
+env/
+node_modules/
 dist/
-eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
+build/
 *.egg-info/
 .installed.cfg
 *.egg
+*.log
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+# Virtual environment
+venv/
+.venv/
 
-# Unit test / coverage reports
+# Vue.js
+/dist/
+/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Testing
 .tox/
 .coverage
-.cache
-nosetests.xml
-coverage.xml
-
-# Translations
-*.mo
-
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
-
-# Rope
-.ropeproject
-
-# Django stuff:
-*.log
-*.pot
+.pytest_cache/
 
 # Sphinx documentation
 docs/_build/
 
-#Python
-src/__pycache__/*
-__pycache__/
-.env
+# Translations
+*.mo
+
+# Development server pid
+.dev.pid
+
+# Others
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

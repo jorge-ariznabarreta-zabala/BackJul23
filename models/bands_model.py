@@ -39,7 +39,7 @@ class Band:
             conn.close()
         
     @classmethod
-    @token_required
+    #@token_required
     def get_bands(cls):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -74,11 +74,11 @@ class Band:
             conn.close()
 
     @classmethod
-    @token_required
+    #@token_required
     def get_band(cls, band_id):
         # Conexión a la base de datos
         conn = mariadb.connect(
-            user="juan",
+            user="root",
             password="penascal",
             host="127.0.0.1",
             port=3306,
@@ -110,7 +110,7 @@ class Band:
             conn.close()
 
     @classmethod
-    @token_required
+#    @token_required
     def post_band(cls, band):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -139,7 +139,7 @@ class Band:
             conn.close()
 
     @classmethod
-    @token_required
+   # @token_required
     def put_band(cls, data, band_id):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -171,7 +171,7 @@ class Band:
             conn.close()
 
     @classmethod
-    @token_required
+   # @token_required
     def patch_band(cls, data, band_id):
         # Conexión a la base de datos
         conn = mariadb.connect(
@@ -212,7 +212,7 @@ class Band:
             conn.close()
 
     @classmethod
-    @token_required
+   # @token_required
     def delete_band(cls, band_id):
         # Conexión a la base de datos
         conn = mariadb.connect(

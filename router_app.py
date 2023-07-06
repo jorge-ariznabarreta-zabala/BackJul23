@@ -34,8 +34,8 @@ def get_logged_user():
     login_email = login_data.get('login_email')
     passw = login_data.get('passw')
     if login_email and passw:
-        print ('@#@#@# get_logged_user',login_data, login_email, passw)
-    user, token = Users.login(login_email, passw)
+        #print ('@#@#@# get_logged_user',login_data, login_email, passw)
+        user, token = Users.login(login_email, passw)
     if user:
         return jsonify({'user': user, 'token': token})    
     return jsonify({'message': 'Error en el login ROUTER'})
@@ -43,7 +43,7 @@ def get_logged_user():
 
 #BANDS
 @app.route("/bands", methods=["GET"])
-def get_bands():
+def get_bands_router():
     bands, status_code = Band.get_bands()
     return bands, status_code
 

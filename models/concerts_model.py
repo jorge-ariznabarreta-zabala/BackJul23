@@ -227,5 +227,3 @@ class Concert:
         finally:
             cursor.close()
             conn.close()
-#Crea la tabla si no existe
-Concert.create_table()

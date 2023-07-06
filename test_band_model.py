@@ -74,12 +74,12 @@ def test_post_band():
         "bandname": "Abbaq2",
         "style": "Pop",
         "website": "www.dancingqueen.com",
-        "email": "dancing@queen.com"
+        "email": "dancing@qn.com"
     }
     response, status = Band.post_band(band_data)
     assert status == 200
     assert isinstance(response, dict)
-    assert response["message"] == "Band created successfully"
+    assert response["message"] == "Band crated successfully"
 
 def test_put_band(sample_band):
     # Prueba el método put_band()

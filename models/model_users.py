@@ -194,6 +194,3 @@ class Users:
             return str(e)
         finally:
             conn.close()
-
-#Crea la tabla si no existe       
-Users.create_table()
